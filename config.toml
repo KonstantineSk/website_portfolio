@@ -93,15 +93,15 @@ disqusShortname = ""
     
     [[params.tiles.showcase]]
       title = "Yield Curve Inversion"
-      subtitle = "Ipsum Dolor Sit Amet"
+      subtitle = "Yield Curve Inversion and Recessions"
       image = "pic01.jpg"
       url = "blogs/blog5"
 
     [[params.tiles.showcase]]
-      title = "Tempus"
-      subtitle = "Feugiat Amet Tempus"
+      title = "Returns of Financial Stocks"
+      subtitle = "Dow Jones Industrial Average Data"
       image = "pic02.jpg"
-      url = "blogs/tempus"
+      url = "blogs/blog6"
 
     [[params.tiles.showcase]]
       title = "Magna"
