@@ -1,0 +1,217 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T21:28:43-05:00"
+description: "IBM HR Analytics"
+draft: false
+image: pic10.jpg
+keywords: ""
+slug: blog7
+title: IBM HR Analytics
+---
+
+
+
+<p>IBM HR Analytics</p>
+<p>For this task, you will analyse a data set on Human Resoruce Analytics. The <a href="https://www.kaggle.com/pavansubhasht/ibm-hr-analytics-attrition-dataset">IBM HR Analytics Employee Attrition &amp; Performance data set</a> is a fictional data set created by IBM data scientists. Among other things, the data set includes employees’ income, their distance from work, their position in the company, their level of education, etc. A full description can be found on the website.</p>
+<p>First let us load the data</p>
+<pre class="r"><code>hr_dataset &lt;- read_csv(here::here(&quot;data&quot;, &quot;datasets_1067_1925_WA_Fn-UseC_-HR-Employee-Attrition.csv&quot;))
+glimpse(hr_dataset)</code></pre>
+<pre><code>## Rows: 1,470
+## Columns: 35
+## $ Age                      &lt;dbl&gt; 41, 49, 37, 33, 27, 32, 59, 30, 38, 36, 35...
+## $ Attrition                &lt;chr&gt; &quot;Yes&quot;, &quot;No&quot;, &quot;Yes&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;...
+## $ BusinessTravel           &lt;chr&gt; &quot;Travel_Rarely&quot;, &quot;Travel_Frequently&quot;, &quot;Tra...
+## $ DailyRate                &lt;dbl&gt; 1102, 279, 1373, 1392, 591, 1005, 1324, 13...
+## $ Department               &lt;chr&gt; &quot;Sales&quot;, &quot;Research &amp; Development&quot;, &quot;Resear...
+## $ DistanceFromHome         &lt;dbl&gt; 1, 8, 2, 3, 2, 2, 3, 24, 23, 27, 16, 15, 2...
+## $ Education                &lt;dbl&gt; 2, 1, 2, 4, 1, 2, 3, 1, 3, 3, 3, 2, 1, 2, ...
+## $ EducationField           &lt;chr&gt; &quot;Life Sciences&quot;, &quot;Life Sciences&quot;, &quot;Other&quot;,...
+## $ EmployeeCount            &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...
+## $ EmployeeNumber           &lt;dbl&gt; 1, 2, 4, 5, 7, 8, 10, 11, 12, 13, 14, 15, ...
+## $ EnvironmentSatisfaction  &lt;dbl&gt; 2, 3, 4, 4, 1, 4, 3, 4, 4, 3, 1, 4, 1, 2, ...
+## $ Gender                   &lt;chr&gt; &quot;Female&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Female&quot;, &quot;Male&quot;...
+## $ HourlyRate               &lt;dbl&gt; 94, 61, 92, 56, 40, 79, 81, 67, 44, 94, 84...
+## $ JobInvolvement           &lt;dbl&gt; 3, 2, 2, 3, 3, 3, 4, 3, 2, 3, 4, 2, 3, 3, ...
+## $ JobLevel                 &lt;dbl&gt; 2, 2, 1, 1, 1, 1, 1, 1, 3, 2, 1, 2, 1, 1, ...
+## $ JobRole                  &lt;chr&gt; &quot;Sales Executive&quot;, &quot;Research Scientist&quot;, &quot;...
+## $ JobSatisfaction          &lt;dbl&gt; 4, 2, 3, 3, 2, 4, 1, 3, 3, 3, 2, 3, 3, 4, ...
+## $ MaritalStatus            &lt;chr&gt; &quot;Single&quot;, &quot;Married&quot;, &quot;Single&quot;, &quot;Married&quot;, ...
+## $ MonthlyIncome            &lt;dbl&gt; 5993, 5130, 2090, 2909, 3468, 3068, 2670, ...
+## $ MonthlyRate              &lt;dbl&gt; 19479, 24907, 2396, 23159, 16632, 11864, 9...
+## $ NumCompaniesWorked       &lt;dbl&gt; 8, 1, 6, 1, 9, 0, 4, 1, 0, 6, 0, 0, 1, 0, ...
+## $ Over18                   &lt;chr&gt; &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y...
+## $ OverTime                 &lt;chr&gt; &quot;Yes&quot;, &quot;No&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;No&quot;, &quot;No&quot;, &quot;Ye...
+## $ PercentSalaryHike        &lt;dbl&gt; 11, 23, 15, 11, 12, 13, 20, 22, 21, 13, 13...
+## $ PerformanceRating        &lt;dbl&gt; 3, 4, 3, 3, 3, 3, 4, 4, 4, 3, 3, 3, 3, 3, ...
+## $ RelationshipSatisfaction &lt;dbl&gt; 1, 4, 2, 3, 4, 3, 1, 2, 2, 2, 3, 4, 4, 3, ...
+## $ StandardHours            &lt;dbl&gt; 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80...
+## $ StockOptionLevel         &lt;dbl&gt; 0, 1, 0, 0, 1, 0, 3, 1, 0, 2, 1, 0, 1, 1, ...
+## $ TotalWorkingYears        &lt;dbl&gt; 8, 10, 7, 8, 6, 8, 12, 1, 10, 17, 6, 10, 5...
+## $ TrainingTimesLastYear    &lt;dbl&gt; 0, 3, 3, 3, 3, 2, 3, 2, 2, 3, 5, 3, 1, 2, ...
+## $ WorkLifeBalance          &lt;dbl&gt; 1, 3, 3, 3, 3, 2, 2, 3, 3, 2, 3, 3, 2, 3, ...
+## $ YearsAtCompany           &lt;dbl&gt; 6, 10, 0, 8, 2, 7, 1, 1, 9, 7, 5, 9, 5, 2,...
+## $ YearsInCurrentRole       &lt;dbl&gt; 4, 7, 0, 7, 2, 7, 0, 0, 7, 7, 4, 5, 2, 2, ...
+## $ YearsSinceLastPromotion  &lt;dbl&gt; 0, 1, 0, 3, 2, 3, 0, 0, 1, 7, 0, 0, 4, 1, ...
+## $ YearsWithCurrManager     &lt;dbl&gt; 5, 7, 0, 0, 2, 6, 0, 0, 8, 7, 3, 8, 3, 2, ...</code></pre>
+<p>I am going to clean the data set, as variable names are in capital letters, some variables are not really necessary, and some variables, e.g., <code>education</code> are given as a number rather than a more useful description</p>
+<pre class="r"><code>hr_cleaned &lt;- hr_dataset %&gt;% 
+  clean_names() %&gt;% 
+  mutate(
+    education = case_when(
+      education == 1 ~ &quot;Below College&quot;,
+      education == 2 ~ &quot;College&quot;,
+      education == 3 ~ &quot;Bachelor&quot;,
+      education == 4 ~ &quot;Master&quot;,
+      education == 5 ~ &quot;Doctor&quot;
+    ),
+    environment_satisfaction = case_when(
+      environment_satisfaction == 1 ~ &quot;Low&quot;,
+      environment_satisfaction == 2 ~ &quot;Medium&quot;,
+      environment_satisfaction == 3 ~ &quot;High&quot;,
+      environment_satisfaction == 4 ~ &quot;Very High&quot;
+    ),
+    job_satisfaction = case_when(
+      job_satisfaction == 1 ~ &quot;Low&quot;,
+      job_satisfaction == 2 ~ &quot;Medium&quot;,
+      job_satisfaction == 3 ~ &quot;High&quot;,
+      job_satisfaction == 4 ~ &quot;Very High&quot;
+    ),
+    performance_rating = case_when(
+      performance_rating == 1 ~ &quot;Low&quot;,
+      performance_rating == 2 ~ &quot;Good&quot;,
+      performance_rating == 3 ~ &quot;Excellent&quot;,
+      performance_rating == 4 ~ &quot;Outstanding&quot;
+    ),
+    work_life_balance = case_when(
+      work_life_balance == 1 ~ &quot;Bad&quot;,
+      work_life_balance == 2 ~ &quot;Good&quot;,
+      work_life_balance == 3 ~ &quot;Better&quot;,
+      work_life_balance == 4 ~ &quot;Best&quot;
+    )
+  ) %&gt;% 
+  select(age, attrition, daily_rate, department,
+         distance_from_home, education,
+         gender, job_role,environment_satisfaction,
+         job_satisfaction, marital_status,
+         monthly_income, num_companies_worked, percent_salary_hike,
+         performance_rating, total_working_years,
+         work_life_balance, years_at_company,
+         years_since_last_promotion)
+
+glimpse(hr_cleaned)</code></pre>
+<pre><code>## Rows: 1,470
+## Columns: 19
+## $ age                        &lt;dbl&gt; 41, 49, 37, 33, 27, 32, 59, 30, 38, 36, ...
+## $ attrition                  &lt;chr&gt; &quot;Yes&quot;, &quot;No&quot;, &quot;Yes&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;N...
+## $ daily_rate                 &lt;dbl&gt; 1102, 279, 1373, 1392, 591, 1005, 1324, ...
+## $ department                 &lt;chr&gt; &quot;Sales&quot;, &quot;Research &amp; Development&quot;, &quot;Rese...
+## $ distance_from_home         &lt;dbl&gt; 1, 8, 2, 3, 2, 2, 3, 24, 23, 27, 16, 15,...
+## $ education                  &lt;chr&gt; &quot;College&quot;, &quot;Below College&quot;, &quot;College&quot;, &quot;...
+## $ gender                     &lt;chr&gt; &quot;Female&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Female&quot;, &quot;Mal...
+## $ job_role                   &lt;chr&gt; &quot;Sales Executive&quot;, &quot;Research Scientist&quot;,...
+## $ environment_satisfaction   &lt;chr&gt; &quot;Medium&quot;, &quot;High&quot;, &quot;Very High&quot;, &quot;Very Hig...
+## $ job_satisfaction           &lt;chr&gt; &quot;Very High&quot;, &quot;Medium&quot;, &quot;High&quot;, &quot;High&quot;, &quot;...
+## $ marital_status             &lt;chr&gt; &quot;Single&quot;, &quot;Married&quot;, &quot;Single&quot;, &quot;Married&quot;...
+## $ monthly_income             &lt;dbl&gt; 5993, 5130, 2090, 2909, 3468, 3068, 2670...
+## $ num_companies_worked       &lt;dbl&gt; 8, 1, 6, 1, 9, 0, 4, 1, 0, 6, 0, 0, 1, 0...
+## $ percent_salary_hike        &lt;dbl&gt; 11, 23, 15, 11, 12, 13, 20, 22, 21, 13, ...
+## $ performance_rating         &lt;chr&gt; &quot;Excellent&quot;, &quot;Outstanding&quot;, &quot;Excellent&quot;,...
+## $ total_working_years        &lt;dbl&gt; 8, 10, 7, 8, 6, 8, 12, 1, 10, 17, 6, 10,...
+## $ work_life_balance          &lt;chr&gt; &quot;Bad&quot;, &quot;Better&quot;, &quot;Better&quot;, &quot;Better&quot;, &quot;Be...
+## $ years_at_company           &lt;dbl&gt; 6, 10, 0, 8, 2, 7, 1, 1, 9, 7, 5, 9, 5, ...
+## $ years_since_last_promotion &lt;dbl&gt; 0, 1, 0, 3, 2, 3, 0, 0, 1, 7, 0, 0, 4, 1...</code></pre>
+<p>Produce a one-page summary describing this dataset. Here is a non-exhaustive list of questions:</p>
+<ol style="list-style-type: decimal">
+<li>How often do people leave the company (<code>attrition</code>)</li>
+</ol>
+<pre class="r"><code>hr_cleaned %&gt;% 
+  filter(attrition == &quot;Yes&quot;) %&gt;% 
+  count() / nrow(hr_cleaned)</code></pre>
+<pre><code>##       n
+## 1 0.161</code></pre>
+<p>Attrition measures the rate or number of employees lost over a period of time that are not replaced. The company in the dataset has an attrition rate of 16.1% as 237 out of the 1470 employees answered “YES” to attrition, meaning that 16.1% of its workforce was let go/resigned without being replaced.</p>
+<ol style="list-style-type: decimal">
+<li>How are <code>age</code>, <code>years_at_company</code>, <code>monthly_income</code> and <code>years_since_last_promotion</code> distributed? can you roughly guess which of these variables is closer to Normal just by looking at summary statistics?</li>
+</ol>
+<pre class="r"><code>ggplot(hr_cleaned, aes(x=age)) + geom_density()</code></pre>
+<p><img src="/blogs/blog7_files/figure-html/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(hr_cleaned, aes(x=years_at_company)) + geom_density()</code></pre>
+<p><img src="/blogs/blog7_files/figure-html/unnamed-chunk-4-2.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(hr_cleaned, aes(x=monthly_income)) + geom_density()</code></pre>
+<p><img src="/blogs/blog7_files/figure-html/unnamed-chunk-4-3.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(hr_cleaned, aes(x=years_since_last_promotion)) + geom_density()</code></pre>
+<p><img src="/blogs/blog7_files/figure-html/unnamed-chunk-4-4.png" width="648" style="display: block; margin: auto;" />
+From the above plots, it is clear that none of the graphs follow a perfectly normal distribution, as there is some skew to each of them. The Age graph is the closest to the bell shaped normal distribution, however even that is slightly positively skewed, and this is to be expected as most companies aim to have a young workforce rather than one reaching retirement. The years at company graph is very positively skewed, showing that the firm may have a high turnover, as most individuals reported a low number of years working with the firm. Both other graphs are also positively skewed, showing that promotions seem to occur relatively often, and most of the individuals in the firm are on a salary of less than $5000.</p>
+<ol style="list-style-type: decimal">
+<li>How are <code>job_satisfaction</code> and <code>work_life_balance</code> distributed? Don’t just report counts, but express categories as % of total</li>
+</ol>
+<pre class="r"><code>ggplot(hr_cleaned, aes(x=job_satisfaction , y = (..count..)/sum(..count..))) + 
+  geom_bar() + labs(title = &quot;Job Satisfaction Distribution&quot;, x = &quot;Job Satisfaction&quot;, y = &quot;Percentage of Total&quot;)</code></pre>
+<p><img src="/blogs/blog7_files/figure-html/unnamed-chunk-5-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(hr_cleaned, aes(x=work_life_balance , y = (..count..)/sum(..count..))) + 
+  geom_bar() + labs(title = &quot;Work-life Balance Distribution&quot;, x = &quot;Work-life Balance&quot;, y = &quot;Percentage of Total&quot;)</code></pre>
+<p><img src="/blogs/blog7_files/figure-html/unnamed-chunk-5-2.png" width="648" style="display: block; margin: auto;" />
+From the Job Satisfaction bar chart, it is clear the employees of the firm have an overall positive feeling about their work environment. Over 60% reported a high (30%) or very high (roughly 33%) job satisfaction, while less than 40% reported a low or medium satisfaction. This thus indicates a negative skew, as most observations are at the higher end of the graph. One factor that may cause this is the work life balance at the firm, as seen in the 2nd bar chart. An overwhelmingly low % of employees reported a bad work life balance (roughly 7%) while around 61% reported “better” and 10% reported best. Again, this indicates a negative skew, as most observations are at the higher end of the graph.</p>
+<ol style="list-style-type: decimal">
+<li>Is there any relationship between monthly income and education? Monthly income and gender?</li>
+</ol>
+<pre class="r"><code>hr_cleaned %&gt;% 
+  group_by(education) %&gt;% 
+  summarise(
+    mean_monthly_income = mean(monthly_income) 
+  ) %&gt;%
+  ggplot(aes(x = education, y = mean_monthly_income)) + 
+  geom_col() + 
+  labs(title = &quot;Relationship between monthly income and education&quot;, x = &quot;Education&quot;, y = &quot;Monthly Income&quot;)</code></pre>
+<p><img src="/blogs/blog7_files/figure-html/unnamed-chunk-6-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hr_cleaned %&gt;% 
+  group_by(gender) %&gt;% 
+  summarise(
+    mean_monthly_income = mean(monthly_income) 
+  ) %&gt;%
+  ggplot(aes(x = gender, y = mean_monthly_income)) + geom_col() + 
+  labs(title = &quot;Relationship between monthly income and gender&quot;, x = &quot;Gender&quot;, y = &quot;Monthly Income&quot;)</code></pre>
+<p><img src="/blogs/blog7_files/figure-html/unnamed-chunk-6-2.png" width="648" style="display: block; margin: auto;" />
+The below bar chart shows that there is a relationship between monthly income and education level. On average, the more degrees an individual obtained, the higher their average monthly income, with doctors having the highest monthly income at over $8000 and below college educated indidivuals having the lowest at below $6000. This is to be expected, as progressing further up the academic ladder from college to bachelors to masters to doctor adds to an individuals skillset and makes them more attractive propositions to employers, thus allowing them to command a higher salary. Somewhat surprisingly, there is little to no link between gender and income, with females having a marginally higher income on average than men. This is contrary to the majority of cases worldwide, but the discrepancy is fairly small so this is not particularly significant.</p>
+<ol style="list-style-type: decimal">
+<li>Plot a boxplot of income vs job role. Make sure the highest-paid job roles appear first</li>
+</ol>
+<pre class="r"><code>ggplot(hr_cleaned, aes(y = reorder(job_role, monthly_income), x = monthly_income)) +
+  geom_boxplot() + 
+  labs(title = &quot;Box Plot of income vs job role&quot;, x = &quot;Monthly income&quot;, y = &quot;Job role&quot;)</code></pre>
+<p><img src="/blogs/blog7_files/figure-html/unnamed-chunk-7-1.png" width="648" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>Calculate and plot a bar chart of the mean (or median?) income by education level.</li>
+</ol>
+<pre class="r"><code>hr_cleaned %&gt;% 
+  group_by(education) %&gt;% 
+  summarise(
+    mean_monthly_income = mean(monthly_income) 
+  ) %&gt;%
+  ggplot(aes(x = education, y = mean_monthly_income)) + 
+  geom_col() + 
+  labs(title = &quot;Relationship between monthly income and education&quot;, x = &quot;Education&quot;, y = &quot;Monthly Income&quot;)</code></pre>
+<p><img src="/blogs/blog7_files/figure-html/unnamed-chunk-8-1.png" width="648" style="display: block; margin: auto;" />
+The above box plot shows the differing monthly incomes for individuals at different levels of the corporate hierarchy. As expected, managers are at the top of the income scale, and given the responsibilities, qualifications and years of employment needed to reach this status, it is fairly easy to understand their position in the plot. The incomes then trickle down to sales representative at the bottom, but there is an interesting fact to note in that there seem to be 3 “levels” of income brackets at the firm. At the bottom, sales reps, laboratory techs, research scientists and HR employees all sit more or less around similar median incomes (outliers notwithstanding). The middle bracket consists of sales execs, manufacturing directors and healthcare reps, all with similar median incomes, almost double the bracket below them. The top bracket consists only of 2 positions, the research director and manager, both with similar median incomes, roughly 3x the bracket below them (representing the perks of having the top jobs at the firm).</p>
+<ol style="list-style-type: decimal">
+<li>Plot the distribution of income by education level. Use a facet_wrap and a theme from <code>ggthemes</code></li>
+</ol>
+<pre class="r"><code>ggplot(hr_cleaned, aes(x = monthly_income)) +
+  geom_density() +
+  facet_wrap(~education) +
+  labs(title = &quot;Distribution of income by educational level&quot;) +
+  theme_economist_white()</code></pre>
+<p><img src="/blogs/blog7_files/figure-html/unnamed-chunk-9-1.png" width="648" style="display: block; margin: auto;" />
+The density plots above show the differing distributions of incomes for each education level. As expected, the higher the education level, the greater the probability of making a higher salary. Looking at the below college graph, there are very few cases of individuals making in excess of $10000, whereas for doctors or masters students, the probability is much higher. It is also worth noting that there is a smaller variation of income in the lower education levels, showing that people with “lower ranking” degrees are shoehorned into a smaller selection of jobs, and top income opportunities are unavailable.</p>
+<ol style="list-style-type: decimal">
+<li>Plot income vs age, faceted by <code>job_role</code></li>
+</ol>
+<pre class="r"><code>ggplot(hr_cleaned, aes(x = age, y = monthly_income)) +
+  geom_point() +
+  facet_wrap(~job_role) +
+  labs(title = &quot;Income vs age across job roles&quot;) +
+  theme_clean()</code></pre>
+<p><img src="/blogs/blog7_files/figure-html/unnamed-chunk-10-1.png" width="648" style="display: block; margin: auto;" />
+The above scatterplots show the relationship between income and age in differing job roles. As one would expect, the lower paying job roles such as sales rep or lab technician are mostly occupied by younger individuals at the start of their careers. This is to be expected, as these lower paying jobs have fewer qualifications and thus are accessible to individuals quite early on. In contrast, the top paying jobs such as manager have a much higher average age, reflecting the years of experience and corporate ladder climbing needed to attain such a role</p>

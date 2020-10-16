@@ -100,14 +100,14 @@ disqusShortname = ""
     [[params.tiles.showcase]]
       title = "Returns of Financial Stocks"
       subtitle = "Dow Jones Industrial Average Data"
-      image = "pic02.jpg"
+      image = "pic101.jpg"
       url = "blogs/blog6"
 
     [[params.tiles.showcase]]
-      title = "Magna"
-      subtitle = "Lorem Etiam Nullam"
-      image = "pic03.jpg"
-      url = "blogs/magna"
+      title = "IBM HR Analysis"
+      subtitle = "Deep Dive into HR Analysis at IBM"
+      image = "pic11.jpg"
+      url = "blogs/blog7"
 
     [[params.tiles.showcase]]
       title = "Ipsum"
