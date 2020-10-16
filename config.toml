@@ -115,17 +115,17 @@ disqusShortname = ""
       image = "pic77.jpg"
       url = "blogs/blog8"
 
-    [[params.tiles.showcase]]
-      title = "Consequat"
-      subtitle = "Ipsum Dolor Sit Amet"
-      image = "pic05.jpg"
-      url = "blogs/ipsum"
+    #[[params.tiles.showcase]]
+     # title = "Consequat"
+     # subtitle = "Ipsum Dolor Sit Amet"
+     # image = "pic05.jpg"
+     # url = "blogs/ipsum"
 
-    [[params.tiles.showcase]]
-      title = "Etiam"
-      subtitle = "Feugiat Amet Tempus"
-      image = "pic06.jpg"
-      url = "blogs/ipsum"
+    #[[params.tiles.showcase]]
+     # title = "Etiam"
+     # subtitle = "Feugiat Amet Tempus"
+     # image = "pic06.jpg"
+     # url = "blogs/ipsum"
     # You can make more showcases by copy and pasting the code above
 
   [params.blog]
@@ -136,14 +136,14 @@ disqusShortname = ""
     # To add more blogs just copy and paste the code.
 
   # Section Type Two
-  [params.two]
-    enable = true
-    title = "Massa libero"
-    subtitle = """Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. 
-    Mauris aliquet magna magna sed nunc rhoncus pharetra. 
-    Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. 
-    Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero.
-    Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus."""
+ # [params.two]
+  #  enable = true
+   # title = "Massa libero"
+   # subtitle = """Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. 
+   # Mauris aliquet magna magna sed nunc rhoncus pharetra. 
+   # Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. 
+   # Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero.
+   # Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus."""
     buttonText = "Get Started"
     url = "blogs"
 
@@ -178,11 +178,11 @@ disqusShortname = ""
     title = "Phone"
     phone = "+44 7501271614"
 
-    [[params.contact.address]]
-    title = "Address"
-    street = "Street"
-    city = "City, ST 00000"
-    country = "Country"
+    #[[params.contact.address]]
+    #title = "Address"
+    #street = "Street"
+    #city = "City, ST 00000"
+    #country = "Country"
 
   # Footer section
   [params.footer]
@@ -202,17 +202,17 @@ disqusShortname = ""
 
     [[params.footer.social]]
       icon = "fa-facebook"
-      url= "https://www.facebook.com"
+      url= "https://www.facebook.com/konstantine.skandalis/"
       label = "Facebook"
 
     [[params.footer.social]]
       icon = "fa-instagram"
-      url= "https://www.instagram.com"
+      url= "https://www.instagram.com/konstantine99/?hl=en"
       label = "Instagram"
     
     [[params.footer.social]]
       icon = "fa-github"
-      url= "https://www.github.com"
+      url= "https://github.com/KonstantineSk"
       label = "GitHub"
 
    
