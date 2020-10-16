@@ -1,0 +1,134 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T21:28:43-05:00"
+description: "Political Contributions in California During the 2016 Election"
+draft: false
+image: pic77.jpg
+keywords: ""
+slug: blog8
+title: "2016 California Contributions"
+---
+
+
+
+<div id="challenge-2-2016-california-contributors-plots" class="section level1">
+<h1>Challenge 2: 2016 California Contributors plots</h1>
+<p>As discussed in class, I would like you to reproduce the plot that shows the top ten cities in highest amounts raised in political contributions in California during the 2016 US Presidential election.</p>
+<p><img src="C:/Users/Konstantine/Desktop/Postgrad/uni work/website_portfolio/images/challenge2.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>To get this plot, you must join two dataframes; the one you have with all contributions, and data that can translate zipcodes to cities.
+You can find a file with all US zipcodes, e.g., here <a href="http://www.uszipcodelist.com/download.html" class="uri">http://www.uszipcodelist.com/download.html</a>.</p>
+<p>The easiest way would be to create two plots and then place one next to each other. For this, you will need the <code>patchwork</code> package.
+<a href="https://cran.r-project.org/web/packages/patchwork/index.html" class="uri">https://cran.r-project.org/web/packages/patchwork/index.html</a></p>
+<p>While this is ok, what if one asked you to create the same plot for the top 10 candidates and not just the top two? The most challenging part is how to reorder within categories, and for this you will find Julia Silge’s post on <a href="https://juliasilge.com/blog/reorder-within/">REORDERING AND FACETTING FOR GGPLOT2</a> useful.</p>
+<pre class="r"><code># install.packages(&#39;patchwork&#39;)
+# install.packages(&#39;tidytext&#39;)
+library(patchwork)
+library(tidytext)</code></pre>
+<pre class="r"><code># Make sure you use vroom() as it is significantly faster than read.csv()
+CA_contributors_2016 &lt;- vroom::vroom(here::here(&quot;data&quot;,&quot;CA_contributors_2016.csv&quot;))
+zip_code&lt;-vroom::vroom(here::here(&quot;data&quot;,&quot;zip_code_database.csv&quot;),col_types=cols(
+  zip=col_double()))
+CA_zip&lt;-zip_code%&gt;%
+  filter(state==&quot;CA&quot;)
+CA_have_city&lt;-left_join(CA_contributors_2016,CA_zip,by=&#39;zip&#39;)</code></pre>
+<pre class="r"><code>#draw plot for Donald
+D_contb&lt;-CA_have_city%&gt;%
+  filter(cand_nm ==&#39;Trump, Donald J.&#39;)%&gt;%
+  group_by(primary_city)%&gt;%
+  summarize(D_total_city=sum(contb_receipt_amt))%&gt;%
+  arrange(desc(D_total_city))%&gt;%
+  head(10)
+#theme_set(theme_bw())
+plot_1&lt;-ggplot(D_contb,aes(x=D_total_city,y=reorder(primary_city,D_total_city)))+
+  
+  geom_col(fill=&#39;#CC3333&#39;)+
+  labs(x=&#39;Raised money&#39;,y=&#39;&#39;,title=&#39;Trump, Donald J.&#39;)+
+  theme(plot.title = element_text(size=12,hjust = 0.5, margin = margin(t = 5, b = 5)))+ 
+  scale_x_continuous(limits = c(0,600000),labels=scales::dollar_format())+
+  NULL
+
+#draw plot for Hillary
+H_contb&lt;-CA_have_city%&gt;%
+  filter(cand_nm ==&#39;Clinton, Hillary Rodham&#39;)%&gt;%
+  group_by(primary_city)%&gt;%
+  summarize(H_total_city=sum(contb_receipt_amt))%&gt;%
+  arrange(desc(H_total_city))%&gt;%
+  head(10)
+theme_set(theme_bw())
+plot_2&lt;-ggplot(H_contb,aes(x=H_total_city,y=reorder(primary_city,H_total_city)))+
+  geom_col(fill=&#39;#0066CC&#39;)+
+  labs(x=&#39;Raised money&#39;,y=&#39;&#39;,title=&#39;Clinton, Hillary Rodham&#39;)+
+  theme(plot.title = element_text(size=12,hjust = 0.5, margin = margin(t = 5, b = 5)),legend.background = element_rect(fill=&#39;grey&#39;))+
+  scale_x_continuous(limits = c(0,13000000),labels=scales::dollar_format())+
+  NULL
+
+#combine two plots
+plot_2+plot_1+
+  plot_annotation(title=&#39;Where did candidates raise most money?&#39;,theme=theme(plot.title = element_text(size = 12)))+
+  plot_layout(ncol=NULL,nrow=NULL)</code></pre>
+<p><img src="/blogs/blog8_files/figure-html/plots%20with%20patchwork-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>H&lt;-CA_have_city%&gt;%
+  filter(cand_nm==&#39;Clinton, Hillary Rodham&#39;)%&gt;%
+  group_by(primary_city) %&gt;%
+  summarise(total_contb=sum(contb_receipt_amt),cand_nm=&#39;Clinton, Hillary Rodham&#39;)%&gt;%
+  arrange(desc(total_contb))%&gt;%
+  head(10)
+
+D&lt;-CA_have_city%&gt;%
+  filter(cand_nm==&#39;Trump, Donald J.&#39;)%&gt;%
+  group_by(primary_city) %&gt;%
+  summarise(total_contb=sum(contb_receipt_amt),cand_nm=&#39;Trump, Donald J.&#39;)%&gt;%
+  arrange(desc(total_contb))%&gt;%
+  head(10)
+
+X&lt;-bind_rows(H,D,id=NULL)
+
+X%&gt;%
+  mutate(cand_nm = as.factor(cand_nm),
+           primary_city = reorder_within(primary_city, total_contb, cand_nm)) %&gt;%
+  ggplot(aes(x=reorder(primary_city,total_contb), y=total_contb, fill = cand_nm)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~cand_nm, scales = &quot;free&quot;) +
+  coord_flip() +
+  labs(y = &quot;Raised Money&quot;,
+        x = NULL,
+        title = &quot;Where did candidates raise most money?&quot;)+
+  scale_y_continuous(labels=scales::dollar_format())+
+  scale_x_reordered()+
+  NULL</code></pre>
+<p><img src="/blogs/blog8_files/figure-html/plots%20with%20facet-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>top10&lt;-CA_have_city%&gt;%
+  group_by(cand_nm)%&gt;%
+  summarise(total=sum(contb_receipt_amt))%&gt;%
+  arrange(desc(total))%&gt;%
+  head(10)%&gt;%
+  ungroup
+
+top10_contb&lt;-CA_have_city%&gt;%
+  filter(cand_nm==top10$cand_nm)%&gt;%
+  group_by(cand_nm) %&gt;%
+  group_by(primary_city) %&gt;%
+  mutate(total_contb=sum(contb_receipt_amt))%&gt;%
+  distinct(primary_city,.keep_all=TRUE)%&gt;%
+  ungroup
+
+library(data.table)
+top10_contb&lt;-setorder(setkey(setDT(top10_contb), cand_nm), cand_nm, -total_contb)[
+                                          ,.SD[1:10], by=cand_nm]
+top10_contb%&gt;%
+  mutate(cand_nm = as.factor(cand_nm),
+           primary_city = reorder_within(primary_city, total_contb, cand_nm)) %&gt;%
+  ggplot(aes(reorder(primary_city,total_contb), total_contb, fill = cand_nm)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~cand_nm, scales = &quot;free&quot;) +
+  coord_flip() +
+  labs(y = &quot;Raised Money&quot;,
+        x = NULL,
+        title = &quot;Where did candidates raise most money?&quot;)+
+  scale_y_continuous(labels=scales::dollar_format())+
+  scale_x_reordered() +
+  NULL</code></pre>
+<p><img src="/blogs/blog8_files/figure-html/top10%20candidates-1.png" width="648" style="display: block; margin: auto;" /></p>
+</div>
